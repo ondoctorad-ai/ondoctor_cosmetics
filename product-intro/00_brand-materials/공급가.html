@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>dr.petit 공급가</title>
+<meta name="description" content="닥터쁘띠·리안후 대행사 전달용 공급가표.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23111111'/%3E%3Cpath d='M16 6c4 5 7 9 7 13a7 7 0 1 1-14 0c0-4 3-8 7-13Z' fill='%23fff'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
+<style>
+  :root{
+    --paper:#ffffff;
+    --head-bg:#111111;
+    --head-fg:#ffffff;
+    --row-alt:#f7f7f6;
+    --row-hover:#efefee;
+    --ink:#111111;
+    --muted:#6b6b6b;
+    --faint:#a3a3a2;
+    --line:#e3e3e1;
+  }
+  *{box-sizing:border-box;}
+  body{
+    background:var(--paper); color:var(--ink); margin:0;
+    font-family:'Pretendard', -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+    padding-inline:22px; padding-block:0 60px;
+  }
+  .wrap{max-width:900px; margin-inline:auto;}
+  header{padding-block:26px 18px;}
+  .back{display:inline-flex; align-items:center; gap:6px; font-size:.82rem; font-weight:700; color:var(--muted); text-decoration:none; margin-bottom:14px;}
+  .back:hover{color:var(--ink);}
+  .back::before{content:'←';}
+  .eyebrow{font-size:.8rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); margin:0 0 8px;}
+  h1{font-size:1.7rem; font-weight:800; margin:0; letter-spacing:-.01em;}
+  .sub{color:var(--muted); font-size:.88rem; margin-top:10px; line-height:1.6;}
+
+  .tablewrap{
+    overflow-x:auto; border:1px solid var(--line); border-radius:12px;
+    box-shadow:0 1px 2px rgba(0,0,0,.04), 0 10px 26px -16px rgba(0,0,0,.18);
+    margin-top:22px;
+  }
+  table{border-collapse:collapse; width:100%; min-width:560px; background:#fff;}
+  thead th{
+    background:var(--head-bg); color:var(--head-fg);
+    font-size:.76rem; font-weight:700; letter-spacing:.03em; text-transform:uppercase;
+    text-align:left; padding:12px 16px; white-space:nowrap;
+  }
+  thead th.num{text-align:right;}
+  tbody td{
+    padding:13px 16px; font-size:.92rem; border-bottom:1px solid var(--line); line-height:1.5;
+  }
+  tbody tr:nth-child(even){background:var(--row-alt);}
+  tbody tr:hover{background:var(--row-hover);}
+  .name{font-weight:600;}
+  .box{display:block; font-size:.76rem; color:var(--faint); font-weight:400; margin-top:2px;}
+  .num{text-align:right; white-space:nowrap; font-variant-numeric:tabular-nums;}
+  .retail{color:var(--muted);}
+  .supply{font-weight:700;}
+  .arrow{color:var(--faint); padding-inline:2px;}
+  .brand-tag{
+    display:inline-block; font-size:.7rem; font-weight:700; padding:2px 8px; border-radius:100px;
+    background:#111; color:#fff; margin-right:8px; vertical-align:1px;
+  }
+  .brand-tag.reanhu{background:#fff; color:var(--ink); border:1px solid var(--line);}
+
+  .newrow{background:#fff7ea !important;}
+
+  footer{padding-block:22px 6px; color:var(--faint); font-size:.78rem; border-top:1px solid var(--line); margin-top:24px;}
+  footer a{color:var(--muted);}
+  .dl{display:inline-flex; align-items:center; gap:6px; font-size:.8rem; font-weight:700; color:var(--ink); text-decoration:none; margin-top:14px;}
+  .dl:hover{text-decoration:underline;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <a class="back" href="../index.html">화장품 리스트로 돌아가기</a>
+    <p class="eyebrow">Dr.Petit × Reanhu</p>
+    <h1>공급가</h1>
+    <p class="sub">대행사 전달용 공급가표입니다. 정가는 소비자가, 공급가는 대행사 전달 단가 기준이며 괄호 안은 박스당 수량입니다.</p>
+  </header>
+
+  <div class="tablewrap">
+  <table>
+    <thead>
+      <tr>
+        <th>제품명</th>
+        <th class="num">정가</th>
+        <th class="num">공급가</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="name"><span class="brand-tag reanhu">REANHU</span>바쿠치올 리페어 세럼<span class="box">160ea/box</span></td>
+        <td class="num retail">₩69,000</td>
+        <td class="num supply">₩24,150</td>
+      </tr>
+      <tr>
+        <td class="name"><span class="brand-tag reanhu">REANHU</span>바쿠치올 에멀전 시트마스크 (1매입)<span class="box">250ea/box</span></td>
+        <td class="num retail">₩6,000</td>
+        <td class="num supply">₩2,100</td>
+      </tr>
+      <tr>
+        <td class="name"><span class="brand-tag reanhu">REANHU</span>바쿠치올 에멀전 시트마스크 (3매입)<span class="box">50ea/box</span></td>
+        <td class="num retail">₩18,000</td>
+        <td class="num supply">₩6,300</td>
+      </tr>
+      <tr>
+        <td class="name"><span class="brand-tag reanhu">REANHU</span>바쿠치올 에멀전 시트마스크 (10매입)<span class="box">20ea/box</span></td>
+        <td class="num retail">₩60,000</td>
+        <td class="num supply">₩21,000</td>
+      </tr>
+      <tr>
+        <td class="name"><span class="brand-tag reanhu">REANHU</span>엑소좀 시카 카밍 선크림<span class="box">240ea/box</span></td>
+        <td class="num retail">₩60,000</td>
+        <td class="num supply">₩21,000</td>
+      </tr>
+      <tr>
+        <td class="name"><span class="brand-tag reanhu">REANHU</span>엑소부스터 골드샷 앰플<span class="box">66ea/box</span></td>
+        <td class="num retail">₩150,000</td>
+        <td class="num supply">₩52,500</td>
+      </tr>
+      <tr>
+        <td class="name"><span class="brand-tag">Dr.Petit</span>더마컴플리트 판테놀 크림<span class="box">210ea/box</span></td>
+        <td class="num retail">₩45,000</td>
+        <td class="num supply">₩18,000</td>
+      </tr>
+      <tr>
+        <td class="name"><span class="brand-tag">Dr.Petit</span>더마컴플리트 비타민K 크림<span class="box">210ea/box</span></td>
+        <td class="num retail">₩45,000</td>
+        <td class="num supply">₩18,000</td>
+      </tr>
+      <tr>
+        <td class="name"><span class="brand-tag">Dr.Petit</span>포어 밸런싱 포밍 클렌저<span class="box">50ea/box</span></td>
+        <td class="num retail">₩26,000</td>
+        <td class="num supply">₩10,400</td>
+      </tr>
+      <tr>
+        <td class="name"><span class="brand-tag">Dr.Petit</span>마일드 클렌징 워터<span class="box">24ea/box</span></td>
+        <td class="num retail">₩29,000</td>
+        <td class="num supply">₩11,600</td>
+      </tr>
+      <tr>
+        <td class="name"><span class="brand-tag">Dr.Petit</span>데일리 카밍 세럼 클렌저<span class="box">40ea/box</span></td>
+        <td class="num retail">₩29,000</td>
+        <td class="num supply">₩11,600</td>
+      </tr>
+      <tr>
+        <td class="name"><span class="brand-tag">Dr.Petit</span>세라 토닝 캡슐 크림<span class="box">40ea/box</span></td>
+        <td class="num retail">₩29,000</td>
+        <td class="num supply">₩13,050</td>
+      </tr>
+      <tr>
+        <td class="name"><span class="brand-tag">Dr.Petit</span>히알 볼륨 립세린<span class="box">60ea/box</span></td>
+        <td class="num retail">₩34,000</td>
+        <td class="num supply">₩15,300</td>
+      </tr>
+      <tr>
+        <td class="name"><span class="brand-tag">Dr.Petit</span>히알 볼륨 플럼핑 글로스<span class="box">60ea/box</span></td>
+        <td class="num retail">₩36,000</td>
+        <td class="num supply">₩14,400</td>
+      </tr>
+      <tr>
+        <td class="name"><span class="brand-tag">Dr.Petit</span>바쿠치올 리페어 크림<span class="box">120ea/box</span></td>
+        <td class="num retail">₩29,000</td>
+        <td class="num supply">₩11,600</td>
+      </tr>
+      <tr class="newrow">
+        <td class="name"><span class="brand-tag">Dr.Petit</span>선쉴드 크림 블러쉬<span class="box">60ea/box · 신규 제품(이미지 자료 준비중)</span></td>
+        <td class="num retail">₩39,000</td>
+        <td class="num supply">₩11,700</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <a class="dl" href="dr.petit_공급가(대행사전달용)_260917.xlsx" target="_blank" rel="noopener">↓ 원본 엑셀 파일 다운로드</a>
+
+  <footer>온닥터 주식회사 · 출처: dr.petit_공급가(대행사전달용)_260917.xlsx (2026.09.17 기준) · 내부/대행사 전달용</footer>
+</div>
+</body>
+</html>

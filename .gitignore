@@ -1,0 +1,4 @@
+# 이 폴더(public-site/)만 공개 저장소 — 누구나 볼 수 있음. 내부 파일은 바깥(ondoctor_cosmetics/)에
+.DS_Store
+.env
+.env.*

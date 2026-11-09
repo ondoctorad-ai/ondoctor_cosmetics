@@ -1,0 +1,420 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>dr.petit 화장품 리스트</title>
+<meta name="description" content="닥터쁘띠 10개(라인 3개)·리안후 4개 제품의 상세페이지·썸네일 보유 현황 정리표.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23111111'/%3E%3Cpath d='M16 6c4 5 7 9 7 13a7 7 0 1 1-14 0c0-4 3-8 7-13Z' fill='%23fff'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
+<style>
+  :root{
+    --paper:#ffffff;
+    --surface:#ffffff;
+    --head-bg:#111111;
+    --head-fg:#ffffff;
+    --row-alt:#f7f7f6;
+    --row-hover:#efefee;
+    --ink:#111111;
+    --muted:#6b6b6b;
+    --faint:#a3a3a2;
+    --line:#e3e3e1;
+    --link:#111111;
+    --link-en:#6b6b6b;
+    --ok:#111111;
+    --pending:#8a8a88;
+  }
+  *{box-sizing:border-box;}
+  body{
+    background:var(--paper); color:var(--ink); margin:0;
+    font-family:'Pretendard', -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+    padding-inline:22px; padding-block:0 60px;
+  }
+  .wrap{max-width:1360px; margin-inline:auto;}
+  header{padding-block:26px 18px;}
+  .eyebrow{font-size:.8rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); margin:0 0 8px;}
+  h1{font-size:1.7rem; font-weight:800; margin:0; letter-spacing:-.01em;}
+
+  .tablewrap{
+    overflow-x:auto; border:1px solid var(--line); border-radius:12px;
+    box-shadow:0 1px 2px rgba(0,0,0,.04), 0 10px 26px -16px rgba(0,0,0,.18);
+    margin-top:22px;
+  }
+  table{border-collapse:collapse; width:100%; min-width:1200px; background:var(--surface);}
+  thead th{
+    position:sticky; top:0; background:var(--head-bg); color:var(--head-fg);
+    font-size:.76rem; font-weight:700; letter-spacing:.03em; text-transform:uppercase;
+    text-align:left; padding:12px 14px; white-space:nowrap; border-right:1px solid rgba(255,255,255,.14);
+  }
+  thead th:last-child{border-right:none;}
+  tbody td{
+    padding:12px 14px; font-size:.86rem; border-bottom:1px solid var(--line);
+    border-right:1px solid var(--line); vertical-align:middle; line-height:1.5;
+  }
+  tbody td:last-child{border-right:none;}
+  tbody tr:nth-child(even){background:var(--row-alt);}
+  tbody tr:hover{background:var(--row-hover);}
+  .en{font-weight:600;}
+  .line{white-space:nowrap; font-weight:700; font-size:.8rem;}
+  .line-kr{display:block; font-weight:500; font-size:.72rem; color:var(--muted);}
+  .line.none{color:var(--faint); font-weight:500;}
+  .kr{color:var(--muted);}
+  .cat{white-space:nowrap; color:var(--muted);}
+  .vol{white-space:nowrap; font-variant-numeric:tabular-nums; font-weight:600;}
+  .cert-line{display:block; font-size:.8rem; margin-bottom:2px; white-space:nowrap;}
+  .cert-line.ok{color:var(--ok); font-weight:700;}
+  .cert-line.pending{color:var(--pending); font-weight:500;}
+  .cert-line.neutral{color:var(--faint);}
+  .linkset{white-space:nowrap; text-align:center;}
+  .pill{
+    display:inline-block; font-size:.78rem; font-weight:700; text-decoration:none;
+    padding:3px 9px; border-radius:6px; margin:0 4px 4px 0; border:1px solid transparent;
+  }
+  .pill.kr{background:var(--ink); color:#fff;}
+  .pill.en{background:#fff; color:var(--muted); border-color:var(--line);}
+  .thumbprev{display:flex; align-items:center; justify-content:center; gap:8px;}
+  .thumbprev img{width:40px; height:40px; object-fit:contain; border-radius:6px; background:var(--row-alt); border:1px solid #c7c7c3; flex:none;}
+  .assets{font-size:.78rem; color:var(--muted); line-height:1.6;}
+  .notes{font-size:.8rem; color:var(--muted); max-width:220px;}
+
+  .doclinks{display:flex; gap:12px; flex-wrap:wrap; margin-top:16px;}
+  .doclinks a{
+    display:inline-flex; align-items:center; gap:8px; font-size:1rem; font-weight:700;
+    text-decoration:none; color:#fff; background:var(--ink); padding:13px 24px; border-radius:10px;
+    border:1px solid var(--ink); letter-spacing:-.01em; transition:opacity .15s ease, transform .15s ease;
+  }
+  .doclinks a:hover{opacity:.82;}
+  .doclinks a::after{content:'→'; font-weight:400;}
+
+  .price-cell{white-space:nowrap; font-variant-numeric:tabular-nums;}
+  .price-line{display:block; font-size:.8rem; margin-bottom:3px; color:var(--muted);}
+  .price-line:last-child{margin-bottom:0;}
+  .price-line b{font-weight:700; color:var(--ink);}
+  .price-note{color:var(--faint); font-size:.72rem;}
+
+  .filters{display:flex; flex-direction:column; gap:10px; margin-top:20px;}
+  .filter-row{display:flex; align-items:center; gap:8px; flex-wrap:wrap;}
+  .filters .label{font-size:.78rem; color:var(--faint); text-transform:uppercase; letter-spacing:.07em; font-weight:700; margin-right:4px;}
+  .tab{
+    font-family:inherit; font-size:.82rem; font-weight:700; cursor:pointer;
+    padding:7px 14px; border-radius:100px; border:1px solid var(--line);
+    background:#fff; color:var(--muted);
+  }
+  .tab[aria-pressed="true"]{background:var(--ink); color:#fff; border-color:var(--ink);}
+  .tab:focus-visible{outline:2px solid var(--ink); outline-offset:2px;}
+
+  footer{padding-block:22px 6px; color:var(--faint); font-size:.78rem; border-top:1px solid var(--line); margin-top:22px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <p class="eyebrow">Dr.Petit × Reanhu</p>
+    <h1>dr.petit 화장품 리스트</h1>
+    <div class="doclinks">
+      <a href="00_brand-materials/dr-petit-brand-deck_20261102.pdf" target="_blank" rel="noopener">브랜드 소개서</a>
+      <a href="00_brand-materials/공급가.html" target="_blank" rel="noopener">공급가</a>
+    </div>
+  </header>
+
+  <div class="filters" id="filters">
+    <div class="filter-row">
+      <span class="label">브랜드</span>
+      <button class="tab" aria-pressed="true" data-brand="all">전체 14</button>
+      <button class="tab" aria-pressed="false" data-brand="dr-petit">Dr.Petit 10</button>
+      <button class="tab" aria-pressed="false" data-brand="reanhu">REANHU 4</button>
+    </div>
+    <div class="filter-row">
+      <span class="label">라인</span>
+      <button class="tab" aria-pressed="true" data-line="all">전체</button>
+      <button class="tab" aria-pressed="false" data-line="complete">DermaComplete 4</button>
+      <button class="tab" aria-pressed="false" data-line="code">DermaCode 5</button>
+      <button class="tab" aria-pressed="false" data-line="completion">DermaCompletion 1</button>
+    </div>
+    <div class="filter-row">
+      <span class="label">카테고리</span>
+      <button class="tab" aria-pressed="true" data-cat="all">전체 14</button>
+      <button class="tab" aria-pressed="false" data-cat="크림">크림 4</button>
+      <button class="tab" aria-pressed="false" data-cat="클렌저">클렌저 3</button>
+      <button class="tab" aria-pressed="false" data-cat="립세럼">립세럼 1</button>
+      <button class="tab" aria-pressed="false" data-cat="립글로스">립글로스 1</button>
+      <button class="tab" aria-pressed="false" data-cat="메이크업">메이크업 1</button>
+      <button class="tab" aria-pressed="false" data-cat="앰플">앰플 1</button>
+      <button class="tab" aria-pressed="false" data-cat="선크림">선크림 1</button>
+      <button class="tab" aria-pressed="false" data-cat="세럼">세럼 1</button>
+      <button class="tab" aria-pressed="false" data-cat="시트마스크">시트마스크 1</button>
+    </div>
+  </div>
+
+  <div class="tablewrap">
+  <table>
+    <thead>
+      <tr>
+        <th>Line</th>
+        <th>Product Name EN</th>
+        <th>Product Name KR</th>
+        <th>Category</th>
+        <th>Volume</th>
+        <th>Supply Price (₩)</th>
+        <th>Certificate</th>
+        <th>Detail Pages</th>
+        <th>Product Images</th>
+        <th>Marketing Materials</th>
+        <th>Notes</th>
+      </tr>
+    </thead>
+    <tbody>
+
+      <tr data-cat="크림" data-brand="dr-petit" data-line="complete">
+        <td class="line">DermaComplete<span class="line-kr">애프터케어</span></td>
+        <td class="en">DermaComplete Vitamin K Cream</td>
+        <td class="kr">더마컴플리트 비타민K 크림</td>
+        <td class="cat">크림</td>
+        <td class="vol">30mL</td>
+        <td class="price-cell"><span class="price-line">정가 ₩45,000 → <b>₩18,000</b> <span class="price-note">(210ea/box)</span></span></td>
+        <td><span class="cert-line ok">FDA 등록완료</span><span class="cert-line pending">NMPA 심사중</span></td>
+        <td class="linkset"><a class="pill kr" href="https://drive.google.com/open?id=1v8IiI9yPTrhGkS5u-oMItRKafy8itELS&usp=drive_copy" target="_blank" rel="noopener">KR</a></td>
+        <td><div class="thumbprev"><img src="01_dr-petit_vitamin-k/00. thumbnail/vitamin-k_1.jpg" alt=""><a class="pill kr" href="https://drive.google.com/open?id=1K0IuysNU6JoJ6AB2VMigrEIlJ5ND0DRn&usp=drive_copy" target="_blank" rel="noopener">보기</a></div></td>
+        <td class="linkset"><a class="pill kr" href="https://drive.google.com/open?id=1FW7p2Olx_3DQmEDFrcr8MPLYO14zrpq5&usp=drive_copy" target="_blank" rel="noopener">보기</a></td>
+        <td class="notes"></td>
+      </tr>
+
+      <tr data-cat="크림" data-brand="dr-petit" data-line="complete">
+        <td class="line">DermaComplete<span class="line-kr">애프터케어</span></td>
+        <td class="en">DermaComplete Panthenol Cream</td>
+        <td class="kr">더마컴플리트 판테놀 크림</td>
+        <td class="cat">크림</td>
+        <td class="vol">30mL</td>
+        <td class="price-cell"><span class="price-line">정가 ₩45,000 → <b>₩18,000</b> <span class="price-note">(210ea/box)</span></span></td>
+        <td><span class="cert-line ok">FDA 등록완료</span><span class="cert-line pending">NMPA 심사중</span></td>
+        <td class="linkset"><a class="pill kr" href="https://drive.google.com/open?id=1AZP5efgs4zRW3AI1HQt9ouI0tD7T_NvN&usp=drive_copy" target="_blank" rel="noopener">KR</a></td>
+        <td><div class="thumbprev"><img src="02_dr-petit_panthenol/00. thumbnail/panthenol_1.jpg" alt=""><a class="pill kr" href="https://drive.google.com/open?id=1Ftkr5lWf66gU4dv-ur6BPYTIspYHbqYT&usp=drive_copy" target="_blank" rel="noopener">보기</a></div></td>
+        <td class="linkset"><a class="pill kr" href="https://drive.google.com/open?id=17C2wcyBzqEcjsF50R8vTOJIayXdGNXAf&usp=drive_copy" target="_blank" rel="noopener">보기</a></td>
+        <td class="notes"></td>
+      </tr>
+
+      <tr data-cat="립세럼" data-brand="dr-petit" data-line="complete">
+        <td class="line">DermaComplete<span class="line-kr">애프터케어</span></td>
+        <td class="en">DermaComplete Hyal-Volume Lip Serum</td>
+        <td class="kr">히알 볼륨 립세린</td>
+        <td class="cat">립세럼</td>
+        <td class="vol">9.55mL</td>
+        <td class="price-cell"><span class="price-line">정가 ₩34,000 → <b>₩15,300</b> <span class="price-note">(60ea/box)</span></span></td>
+        <td><span class="cert-line ok">FDA 등록완료</span></td>
+        <td class="linkset"><a class="pill kr" href="https://drive.google.com/open?id=1uKw5GgGq354YCE-uZ9Lbqr01LCCpHoKc&usp=drive_copy" target="_blank" rel="noopener">KR</a></td>
+        <td><div class="thumbprev"><img src="03_dr-petit_lip-serum/00. thumbnail/lip-serum_1.jpg" alt=""><a class="pill kr" href="https://drive.google.com/open?id=1dpQymqIzOb5rdfFogwQD--yuyUcqFL25&usp=drive_copy" target="_blank" rel="noopener">보기</a></div></td>
+        <td></td>
+        <td class="notes"></td>
+      </tr>
+
+      <tr data-cat="립글로스" data-brand="dr-petit" data-line="complete">
+        <td class="line">DermaComplete<span class="line-kr">애프터케어</span></td>
+        <td class="en">DermaComplete Hyal-Volume Plumping Gloss</td>
+        <td class="kr">히알 볼륨 플럼핑 글로스</td>
+        <td class="cat">립글로스</td>
+        <td class="vol">3.8g</td>
+        <td class="price-cell"><span class="price-line">정가 ₩36,000 → <b>₩14,400</b> <span class="price-note">(60ea/box)</span></span></td>
+        <td><span class="cert-line ok">FDA 등록완료</span></td>
+        <td class="linkset"><a class="pill kr" href="https://drive.google.com/open?id=1hPasQBpp0qLOXN7ESqReoYYQkBgRT4Xx&usp=drive_copy" target="_blank" rel="noopener">KR</a></td>
+        <td><div class="thumbprev"><img src="04_dr-petit_lip-gloss/00. thumbnail/lip-gloss_1.jpg" alt=""><a class="pill kr" href="https://drive.google.com/open?id=1YTYfE0S4fkYTMD38gOjpHSYsKzOSF5uL&usp=drive_copy" target="_blank" rel="noopener">보기</a></div></td>
+        <td></td>
+        <td class="notes"></td>
+      </tr>
+
+      <tr data-cat="클렌저" data-brand="dr-petit" data-line="code">
+        <td class="line">DermaCode<span class="line-kr">데일리</span></td>
+        <td class="en">Mild Cleansing Water</td>
+        <td class="kr">마일드 클렌징 워터</td>
+        <td class="cat">클렌저</td>
+        <td class="vol">300mL</td>
+        <td class="price-cell"><span class="price-line">정가 ₩29,000 → <b>₩11,600</b> <span class="price-note">(24ea/box)</span></span></td>
+        <td><span class="cert-line ok">FDA 등록완료</span></td>
+        <td class="linkset"><a class="pill kr" href="https://drive.google.com/open?id=11vH7FKgnC1vOPNLB_J00FUqbY7UA2Hvd&usp=drive_copy" target="_blank" rel="noopener">KR</a></td>
+        <td><div class="thumbprev"><img src="09_dr-petit_mild-cleansing/00. thumbnail/mild-cleansing_1.jpg" alt=""><a class="pill kr" href="https://drive.google.com/open?id=1hcXhMPa7LOC2kbJfM1R47ki8N2_aIWK9&usp=drive_copy" target="_blank" rel="noopener">보기</a></div></td>
+        <td class="linkset"><a class="pill kr" href="https://drive.google.com/open?id=17k5Bgg16tW1JvxpqElp41hkdSnXncwFx&usp=drive_copy" target="_blank" rel="noopener">보기</a></td>
+        <td class="notes"></td>
+      </tr>
+
+      <tr data-cat="클렌저" data-brand="dr-petit" data-line="code">
+        <td class="line">DermaCode<span class="line-kr">데일리</span></td>
+        <td class="en">Pore Balance Foaming Cleanser</td>
+        <td class="kr">포어 밸런스 포밍 클렌저</td>
+        <td class="cat">클렌저</td>
+        <td class="vol">120mL</td>
+        <td class="price-cell"><span class="price-line">정가 ₩26,000 → <b>₩10,400</b> <span class="price-note">(50ea/box)</span></span></td>
+        <td><span class="cert-line ok">FDA 등록완료</span></td>
+        <td class="linkset"><a class="pill kr" href="https://drive.google.com/open?id=1oenp5oZ-rfLY41VNSQ00UBIjMvpcfqLC&usp=drive_copy" target="_blank" rel="noopener">KR</a></td>
+        <td><div class="thumbprev"><img src="08_dr-petit_pore-balance/00. thumbnail/pore-balance_1.jpg" alt=""><a class="pill kr" href="https://drive.google.com/open?id=1CFSJ9AQm5XadwaMgY3lVtW92EVmxlEgC&usp=drive_copy" target="_blank" rel="noopener">보기</a></div></td>
+        <td class="linkset"><a class="pill kr" href="https://drive.google.com/open?id=1KlWzhuHxPazG2G3nKCOYXTTC2QdO759M&usp=drive_copy" target="_blank" rel="noopener">보기</a></td>
+        <td class="notes"></td>
+      </tr>
+
+      <tr data-cat="클렌저" data-brand="dr-petit" data-line="code">
+        <td class="line">DermaCode<span class="line-kr">데일리</span></td>
+        <td class="en">Daily Calming Serum Cleanser</td>
+        <td class="kr">데일리 카밍 세럼 클렌저</td>
+        <td class="cat">클렌저</td>
+        <td class="vol">200mL</td>
+        <td class="price-cell"><span class="price-line">정가 ₩29,000 → <b>₩11,600</b> <span class="price-note">(40ea/box)</span></span></td>
+        <td><span class="cert-line ok">FDA 등록완료</span></td>
+        <td class="linkset"><a class="pill kr" href="https://drive.google.com/open?id=1ljP-gmYQi2hB35lpUwdB4-6axDzSx2to&usp=drive_copy" target="_blank" rel="noopener">KR</a></td>
+        <td><div class="thumbprev"><img src="07_dr-petit_daily-calming/00. thumbnail/daily-calming_1.jpg" alt=""><a class="pill kr" href="https://drive.google.com/open?id=13ZsA6KRrtRZ3QWoNddr1lW2Mcra5ozZy&usp=drive_copy" target="_blank" rel="noopener">보기</a></div></td>
+        <td class="linkset"><a class="pill kr" href="https://drive.google.com/open?id=12ghR7YmEusZ9hP0MiABOGoUbFUSXcxfI&usp=drive_copy" target="_blank" rel="noopener">보기</a></td>
+        <td class="notes"></td>
+      </tr>
+
+      <tr data-cat="크림" data-brand="dr-petit" data-line="code">
+        <td class="line">DermaCode<span class="line-kr">데일리</span></td>
+        <td class="en">Cera Toning Capsule Cream</td>
+        <td class="kr">세라 토닝 캡슐 크림</td>
+        <td class="cat">크림</td>
+        <td class="vol">55g</td>
+        <td class="price-cell"><span class="price-line">정가 ₩29,000 → <b>₩13,050</b> <span class="price-note">(40ea/box)</span></span></td>
+        <td><span class="cert-line pending">MoCRA 심사중</span><span class="cert-line neutral">기능성화장품</span></td>
+        <td class="linkset"><a class="pill kr" href="https://drive.google.com/open?id=1x70v_kVZ3-ogW_fYDqHhtqwkBe7d_T9L&usp=drive_copy" target="_blank" rel="noopener">KR</a></td>
+        <td><div class="thumbprev"><img src="05_dr-petit_cera-toning/00. thumbnail/cera-toning_1.jpg" alt=""><a class="pill kr" href="https://drive.google.com/open?id=1uS5aOUogFUzTJF6WbON_vpCvW9T8z3dG&usp=drive_copy" target="_blank" rel="noopener">보기</a></div></td>
+        <td></td>
+        <td class="notes"></td>
+      </tr>
+
+      <tr data-cat="크림" data-brand="dr-petit" data-line="code">
+        <td class="line">DermaCode<span class="line-kr">데일리</span></td>
+        <td class="en">Bakuchiol Repair Cream</td>
+        <td class="kr">바쿠치올 리페어 크림</td>
+        <td class="cat">크림</td>
+        <td class="vol">50mL</td>
+        <td class="price-cell"><span class="price-line">정가 ₩29,000 → <b>₩11,600</b> <span class="price-note">(120ea/box)</span></span></td>
+        <td><span class="cert-line pending">MoCRA 심사중</span><span class="cert-line neutral">기능성화장품</span></td>
+        <td class="linkset"><a class="pill kr" href="https://drive.google.com/open?id=1ZG4hsrOoZ_tH3HVo2p4F4Ss_3-X9W2cA&usp=drive_copy" target="_blank" rel="noopener">KR</a></td>
+        <td><div class="thumbprev"><img src="06_dr-petit_bakuchiol-cream/00. thumbnail/bakuchiol-cream_1.jpg" alt=""><a class="pill kr" href="https://drive.google.com/open?id=1k0zApFeqPLP2TXsgUavU0y-2ikj_4g9Y&usp=drive_copy" target="_blank" rel="noopener">보기</a></div></td>
+        <td></td>
+        <td class="notes"></td>
+      </tr>
+
+      <tr data-cat="메이크업" data-brand="dr-petit" data-line="completion">
+        <td class="line">DermaCompletion<span class="line-kr">메이크업</span></td>
+        <td class="en">Dr.Petit SunShield Cream Blush</td>
+        <td class="kr">선쉴드 크림 블러쉬</td>
+        <td class="cat">메이크업</td>
+        <td class="vol">4.4g · 4호수</td>
+        <td class="price-cell"><span class="price-line">정가 ₩39,000 → <b>₩11,700</b> <span class="price-note">(60ea/box)</span></span></td>
+        <td><span class="cert-line neutral">기능성화장품</span><span class="cert-line neutral">미백 · 자외선 차단</span><span class="cert-line neutral">SPF50+ PA++++</span></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td class="notes">4호수: Fig Breeze · Bare Haze · Flirty Petal · Rosewood</td>
+      </tr>
+
+      <tr data-cat="앰플" data-brand="reanhu" data-line="">
+        <td class="line none">—</td>
+        <td class="en">REANHU Exo-Booster Gold Shot Ampoule</td>
+        <td class="kr">엑소부스터 골드샷 앰플</td>
+        <td class="cat">앰플</td>
+        <td class="vol">2g × 7ea</td>
+        <td class="price-cell"><span class="price-line">정가 ₩150,000 → <b>₩52,500</b> <span class="price-note">(66ea/box)</span></span></td>
+        <td><span class="cert-line pending">MoCRA 심사중</span><span class="cert-line neutral">기능성화장품</span></td>
+        <td class="linkset"><a class="pill kr" href="https://drive.google.com/open?id=1xkMUo2R7s5_x4XYuvWv9bE9dUy25_IZw&usp=drive_copy" target="_blank" rel="noopener">KR</a></td>
+        <td><div class="thumbprev"><img src="10_reanhu_gold-shot/00. thumbnail/gold-shot_1.jpg" alt=""><a class="pill kr" href="https://drive.google.com/open?id=10H9t9x52NiKnyDBBsslwi8624_obqsw4&usp=drive_copy" target="_blank" rel="noopener">보기</a></div></td>
+        <td class="linkset"><a class="pill kr" href="https://drive.google.com/open?id=1fJt_x6A5pUQKXWnLA0i12nytiykyQ8Xi&usp=drive_copy" target="_blank" rel="noopener">보기</a></td>
+        <td class="notes"></td>
+      </tr>
+
+      <tr data-cat="선크림" data-brand="reanhu" data-line="">
+        <td class="line none">—</td>
+        <td class="en">REANHU Exosome Cica Calming Sunscreen</td>
+        <td class="kr">엑소좀 시카 카밍 선크림</td>
+        <td class="cat">선크림</td>
+        <td class="vol">50mL</td>
+        <td class="price-cell"><span class="price-line">정가 ₩60,000 → <b>₩21,000</b> <span class="price-note">(240ea/box)</span></span></td>
+        <td><span class="cert-line pending">MoCRA 심사중</span><span class="cert-line neutral">기능성화장품</span><span class="cert-line ok">비건 인증</span></td>
+        <td class="linkset"><a class="pill kr" href="https://drive.google.com/open?id=1jgnugMN7-S5ncKijaXXArhs4WqpPsqPU&usp=drive_copy" target="_blank" rel="noopener">KR</a></td>
+        <td><div class="thumbprev"><img src="11_reanhu_exosome-sun/00. thumbnail/exosome-sun_1.jpg" alt=""><a class="pill kr" href="https://drive.google.com/open?id=1WO6DeTaakbEfp0GD1K55Y6JF2nzyO--H&usp=drive_copy" target="_blank" rel="noopener">보기</a></div></td>
+        <td class="linkset"><a class="pill kr" href="https://drive.google.com/open?id=133cB614aZrTeVmxgwzzGfcUK81W_4iI7&usp=drive_copy" target="_blank" rel="noopener">보기</a></td>
+        <td class="notes"></td>
+      </tr>
+
+      <tr data-cat="세럼" data-brand="reanhu" data-line="">
+        <td class="line none">—</td>
+        <td class="en">REANHU Bakuchiol Repair Serum</td>
+        <td class="kr">바쿠치올 리페어 세럼</td>
+        <td class="cat">세럼</td>
+        <td class="vol">50mL</td>
+        <td class="price-cell"><span class="price-line">정가 ₩69,000 → <b>₩24,150</b> <span class="price-note">(160ea/box)</span></span></td>
+        <td><span class="cert-line pending">MoCRA 심사중</span><span class="cert-line neutral">기능성화장품</span></td>
+        <td class="linkset"><a class="pill kr" href="https://drive.google.com/open?id=1xoEI14ksJKD-wcYyeZT6_ImdsOYb1dac&usp=drive_copy" target="_blank" rel="noopener">KR</a></td>
+        <td><div class="thumbprev"><img src="12_reanhu_bakuchiol-serum/00. thumbnail/bakuchiol-serum_1.jpg" alt=""><a class="pill kr" href="https://drive.google.com/open?id=1EtI7E6v8DeplSLIn4NDEyepHUXnh8-4a&usp=drive_copy" target="_blank" rel="noopener">보기</a></div></td>
+        <td class="linkset"><a class="pill kr" href="https://drive.google.com/open?id=1i2SY3O_UtwaRQCWYeK4ktLOWJNO4DOcm&usp=drive_copy" target="_blank" rel="noopener">보기</a></td>
+        <td class="notes"></td>
+      </tr>
+
+      <tr data-cat="시트마스크" data-brand="reanhu" data-line="">
+        <td class="line none">—</td>
+        <td class="en">REANHU Bakuchiolology Emulsion Sheet Mask</td>
+        <td class="kr">바쿠치올 에멀전 시트마스크</td>
+        <td class="cat">시트마스크</td>
+        <td class="vol">30mL</td>
+        <td class="price-cell">
+          <span class="price-line">1매입 ₩6,000 → <b>₩2,100</b> <span class="price-note">(250ea/box)</span></span>
+          <span class="price-line">3매입 ₩18,000 → <b>₩6,300</b> <span class="price-note">(50ea/box)</span></span>
+          <span class="price-line">10매입 ₩60,000 → <b>₩21,000</b> <span class="price-note">(20ea/box)</span></span>
+        </td>
+        <td><span class="cert-line pending">MoCRA 심사중</span><span class="cert-line pending">NMPA 심사중</span><span class="cert-line neutral">기능성화장품</span></td>
+        <td class="linkset"><a class="pill kr" href="https://drive.google.com/open?id=1Txv9ODJ3Uv_0K8OB_1MuHMCw57zZahkI&usp=drive_copy" target="_blank" rel="noopener">KR</a></td>
+        <td><div class="thumbprev"><img src="13_reanhu_bakuchiol-mask/00. thumbnail/bakuchiol-mask_1.jpg" alt=""><a class="pill kr" href="https://drive.google.com/open?id=1ne_1R19jxi62x-Gx79xbfoQHOceN2TlW&usp=drive_copy" target="_blank" rel="noopener">보기</a></div></td>
+        <td class="linkset"><a class="pill kr" href="https://drive.google.com/open?id=13PvVfBBZmniOqCHAR_DziuSnQCryTGRK&usp=drive_copy" target="_blank" rel="noopener">보기</a></td>
+        <td class="notes"></td>
+      </tr>
+
+    </tbody>
+  </table>
+  </div>
+
+  <footer>온닥터 주식회사 · 닥터쁘띠 / 리안후 자료 제작 현황 — 내부 참고용 · 닥터쁘띠 라인 구성은 브랜드 소개서(2026.11.02) 기준 · 2026.11.05</footer>
+</div>
+<script>
+  var brandTabs = document.querySelectorAll('#filters [data-brand]');
+  var catTabs = document.querySelectorAll('#filters [data-cat]');
+  var lineTabs = document.querySelectorAll('#filters [data-line]');
+  var rows = document.querySelectorAll('tbody tr');
+  var activeBrand = 'all';
+  var activeCat = 'all';
+  var activeLine = 'all';
+
+  function applyFilters(){
+    rows.forEach(function(r){
+      var brandOk = (activeBrand === 'all' || r.getAttribute('data-brand') === activeBrand);
+      var catOk = (activeCat === 'all' || r.getAttribute('data-cat') === activeCat);
+      var lineOk = (activeLine === 'all' || r.getAttribute('data-line') === activeLine);
+      r.hidden = !(brandOk && catOk && lineOk);
+    });
+  }
+
+  brandTabs.forEach(function(tab){
+    tab.addEventListener('click', function(){
+      brandTabs.forEach(function(t){ t.setAttribute('aria-pressed','false'); });
+      tab.setAttribute('aria-pressed','true');
+      activeBrand = tab.getAttribute('data-brand');
+      applyFilters();
+    });
+  });
+
+  lineTabs.forEach(function(tab){
+    tab.addEventListener('click', function(){
+      lineTabs.forEach(function(t){ t.setAttribute('aria-pressed','false'); });
+      tab.setAttribute('aria-pressed','true');
+      activeLine = tab.getAttribute('data-line');
+      applyFilters();
+    });
+  });
+
+  catTabs.forEach(function(tab){
+    tab.addEventListener('click', function(){
+      catTabs.forEach(function(t){ t.setAttribute('aria-pressed','false'); });
+      tab.setAttribute('aria-pressed','true');
+      activeCat = tab.getAttribute('data-cat');
+      applyFilters();
+    });
+  });
+</script>
+</body>
+</html>
